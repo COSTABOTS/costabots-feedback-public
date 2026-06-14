@@ -8,15 +8,65 @@ import {
 } from './feedback';
 import type { FeedbackBranding, FeedbackSubmitState } from './feedback';
 
+type SupportedLang = 'es' | 'en';
+
 const GOOGLE_REVIEW_URL =
   'https://www.google.com/maps/place/Safari+Restaurant/@36.5136772,-4.6574474,15z/data=!4m12!1m2!2m1!1sSafari+Restaurant+Wyndham+Fuengirola!3m8!1s0xd731df9652a6df5:0x6f0fd4bdf886a80b!8m2!3d36.5136772!4d-4.638393!9m1!1b1!15sCiRTYWZhcmkgUmVzdGF1cmFudCBXeW5kaGFtIEZ1ZW5naXJvbGEiA4gBAVomIiRzYWZhcmkgcmVzdGF1cmFudCB3eW5kaGFtIGZ1ZW5naXJvbGGSAQpyZXN0YXVyYW50mgFEQ2k5RFFVbFJRVU52WkVOb2RIbGpSamx2VDJ4T1NHTlVSblZqYkRoM1RqQndjMXB0VGs5UFJHUXlVVE5HV1ZVeVl4QULgAQD6AQQIABA1!16s%2Fg%2F11gphzrlpz?entry=ttu&g_ep=EgoyMDI2MDUyMC4wIKXMDSoASAFQAw%3D%3D';
 
 const TRIPADVISOR_REVIEW_URL =
   'https://www.tripadvisor.com/UserReviewEdit-g315915-d8680692-Safari_Restaurant-Fuengirola_Costa_del_Sol_Province_of_Malaga_Andalucia.html';
 
+const translations = {
+  es: {
+    mainTitle: '¿Cómo valorarías tu experiencia?',
+    subtitle: 'Tu opinión nos ayuda a mejorar cada día.',
+    name: 'Nombre',
+    starText: 'Toca para valorar tu visita',
+    comment: 'Déjanos un comentario',
+    commentPlaceholder: 'Cuéntanos tu experiencia...',
+    submit: 'Enviar valoración',
+    sending: 'Enviando...',
+    success: '¡Gracias por tu valoración!',
+    successSubtitle: '¿Nos ayudas compartiendo tu experiencia?',
+    lowSuccessTitle: 'Tu opinión es muy importante para nosotros',
+    lowSuccessMessage: 'Hemos recibido tu comentario correctamente y nuestro equipo lo revisará personalmente.',
+    lowSuccessExtra: [
+      'Escuchar a nuestros clientes nos ayuda a seguir mejorando cada día.',
+      'Gracias por dedicar unos minutos a compartir tu experiencia.',
+    ],
+    signature: 'Equipo Safari Restaurant',
+    googleReview: 'Dejar reseña en Google',
+    tripadvisorReview: 'Dejar reseña en TripAdvisor',
+    error: 'No se ha podido enviar la valoración en este momento.',
+  },
+  en: {
+    mainTitle: 'How was your experience?',
+    subtitle: 'Your opinion helps us improve every day.',
+    name: 'Name',
+    starText: 'Tap to rate your visit',
+    comment: 'Leave us a comment',
+    commentPlaceholder: 'Tell us about your experience...',
+    submit: 'Submit feedback',
+    sending: 'Sending...',
+    success: 'Thank you for your feedback!',
+    successSubtitle: 'Your opinion is very important to us.',
+    lowSuccessTitle: 'Thank you for your feedback!',
+    lowSuccessMessage: 'We’re sorry your experience wasn’t perfect. Our team will review your feedback personally.',
+    lowSuccessExtra: [],
+    signature: 'Safari Restaurant Team',
+    googleReview: 'Leave a review on Google',
+    tripadvisorReview: 'Leave a review on TripAdvisor',
+    error: 'Something went wrong. Please try again.',
+  },
+} satisfies Record<SupportedLang, Record<string, string | string[]>>;
+
 function getReservationIdFromPath() {
   const match = window.location.pathname.match(/^\/feedback\/([^/]+)\/?$/);
   return match?.[1] ? decodeURIComponent(match[1]) : 'RES-PRUEBA123';
+}
+
+function getLangFromUrl(): SupportedLang {
+  return new URLSearchParams(window.location.search).get('lang') === 'en' ? 'en' : 'es';
 }
 
 function getRatingText(rating: number) {
@@ -25,6 +75,8 @@ function getRatingText(rating: number) {
 
 export function App() {
   const idReserva = getReservationIdFromPath();
+  const lang = getLangFromUrl();
+  const t = translations[lang];
   const [branding, setBranding] = useState<FeedbackBranding>(FALLBACK_BRANDING);
   const [rating, setRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
@@ -74,13 +126,14 @@ export function App() {
         puntuacion: rating,
         puntuacion_texto: getRatingText(rating),
         comentario: comment.trim(),
+        lang,
         timestamp: new Date().toISOString(),
       }, feedbackWebhook);
       setStatus('success');
     } catch (error) {
       console.error('[COSTABOTS Feedback] Error enviando valoracion', error);
       setStatus('error');
-      setErrorMessage('No se ha podido enviar la valoración en este momento.');
+      setErrorMessage(t.error as string);
     }
   }
 
@@ -95,18 +148,18 @@ export function App() {
             <p className="restaurant-name">{branding.restaurantName}</p>
             {isPositiveRating ? (
               <>
-                <h1>¡Gracias por tu valoración!</h1>
-                <p>¿Nos ayudas compartiendo tu experiencia?</p>
+                <h1>{t.success as string}</h1>
+                <p>{t.successSubtitle as string}</p>
                 <div className="review-actions">
                   {GOOGLE_REVIEW_URL && (
                     <a className="review-button" href={GOOGLE_REVIEW_URL} rel="noreferrer" target="_blank">
-                      Dejar reseña en Google
+                      {t.googleReview as string}
                       <ExternalLink size={17} />
                     </a>
                   )}
                   {TRIPADVISOR_REVIEW_URL && (
                     <a className="review-button secondary" href={TRIPADVISOR_REVIEW_URL} rel="noreferrer" target="_blank">
-                      Dejar reseña en TripAdvisor
+                      {t.tripadvisorReview as string}
                       <ExternalLink size={17} />
                     </a>
                   )}
@@ -114,13 +167,14 @@ export function App() {
               </>
             ) : (
               <>
-                <h1>Tu opinión es muy importante para nosotros</h1>
+                <h1>{t.lowSuccessTitle as string}</h1>
                 <div className="private-thanks-copy">
-                  <p>Hemos recibido tu comentario correctamente y nuestro equipo lo revisará personalmente.</p>
-                  <p>Escuchar a nuestros clientes nos ayuda a seguir mejorando cada día.</p>
-                  <p>Gracias por dedicar unos minutos a compartir tu experiencia.</p>
+                  <p>{t.lowSuccessMessage as string}</p>
+                  {(t.lowSuccessExtra as string[]).map((line) => (
+                    <p key={line}>{line}</p>
+                  ))}
                 </div>
-                <p className="thanks-signature">Equipo Safari Restaurant</p>
+                <p className="thanks-signature">{t.signature as string}</p>
               </>
             )}
           </div>
@@ -137,11 +191,11 @@ export function App() {
             <p className="restaurant-name">{branding.restaurantName}</p>
 
             <div className="bot-message">
-              <h1>Gracias por visitarnos</h1>
-              <p>¿Cómo valorarías tu experiencia?</p>
+              <h1>{t.mainTitle as string}</h1>
+              <p>{t.subtitle as string}</p>
             </div>
 
-            <fieldset className="rating-field" aria-label="Puntuacion">
+            <fieldset className="rating-field" aria-label={t.starText as string}>
               {[1, 2, 3, 4, 5].map((value) => (
                 <button
                   key={value}
@@ -161,10 +215,10 @@ export function App() {
             </fieldset>
 
             <label className="comment-field">
-              Comentario opcional
+              {t.comment as string}
               <textarea
                 onChange={(event) => setComment(event.target.value)}
-                placeholder="Cuéntanos qué te gustó o qué podríamos mejorar"
+                placeholder={t.commentPlaceholder as string}
                 rows={4}
                 value={comment}
               />
@@ -179,7 +233,7 @@ export function App() {
 
             <button className="submit-button" disabled={!rating || status === 'sending'} type="submit">
               <Send size={18} />
-              {status === 'sending' ? 'Enviando...' : 'Enviar valoración'}
+              {status === 'sending' ? (t.sending as string) : (t.submit as string)}
             </button>
           </form>
         )}

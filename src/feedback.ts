@@ -16,6 +16,7 @@ export interface SubmitFeedbackPayload {
   puntuacion: number;
   puntuacion_texto: string;
   comentario: string;
+  lang: 'es' | 'en';
   timestamp: string;
 }
 
