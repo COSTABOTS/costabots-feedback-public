@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/feedback/(.*)",
+      "destination": "/"
+    },
+    {
+      "source": "/((?!assets/|favicon.ico|manifest.json|robots.txt|.*\\..*).*)",
+      "destination": "/"
+    }
+  ]
+}

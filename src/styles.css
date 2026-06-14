@@ -1,0 +1,310 @@
+:root {
+  color-scheme: light;
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #172033;
+  background: #eef4ef;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+button,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.feedback-shell {
+  --feedback-accent: #2f7d4a;
+  position: relative;
+  display: grid;
+  min-height: 100dvh;
+  place-items: center;
+  overflow: hidden;
+  padding: 20px;
+  background:
+    radial-gradient(circle at 18% 10%, color-mix(in srgb, var(--feedback-accent) 28%, transparent), transparent 28%),
+    radial-gradient(circle at 82% 92%, rgba(255, 255, 255, 0.9), transparent 32%),
+    linear-gradient(150deg, color-mix(in srgb, var(--feedback-accent) 24%, #fbfffc), #f7faf8 48%, #e7f3eb);
+}
+
+.feedback-shell::before {
+  position: absolute;
+  inset: 0;
+  content: "";
+  background-image: var(--feedback-bg-image);
+  background-position: center;
+  background-size: cover;
+  opacity: 0.34;
+}
+
+.feedback-shell::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.76)),
+    color-mix(in srgb, var(--feedback-accent) 8%, transparent);
+}
+
+.feedback-card {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 432px);
+  border: 1px solid rgba(255, 255, 255, 0.76);
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 24px 70px rgba(17, 24, 39, 0.18);
+  backdrop-filter: blur(16px);
+}
+
+.feedback-form,
+.success-view {
+  display: grid;
+  gap: 18px;
+  justify-items: center;
+  padding: 30px 22px 24px;
+  text-align: center;
+}
+
+.brand-avatar {
+  display: grid;
+  width: 84px;
+  height: 84px;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--feedback-accent) 24%, #ffffff);
+  border-radius: 22px;
+  color: #ffffff;
+  background: var(--feedback-accent);
+  box-shadow: 0 14px 30px color-mix(in srgb, var(--feedback-accent) 25%, transparent);
+}
+
+.brand-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 8px;
+  background: #ffffff;
+}
+
+.brand-avatar span {
+  font-size: 34px;
+  font-weight: 900;
+}
+
+.restaurant-name {
+  margin: 0;
+  color: var(--feedback-accent);
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.bot-message {
+  position: relative;
+  width: 100%;
+  padding: 18px;
+  border-radius: 20px;
+  background: #f7faf8;
+  text-align: left;
+}
+
+.bot-message::before {
+  position: absolute;
+  top: -9px;
+  left: 34px;
+  width: 18px;
+  height: 18px;
+  content: "";
+  background: #f7faf8;
+  transform: rotate(45deg);
+}
+
+.bot-message h1,
+.success-view h1 {
+  margin: 0;
+  color: #172033;
+  font-size: 25px;
+  line-height: 1.12;
+  letter-spacing: 0;
+}
+
+.bot-message p,
+.success-view p {
+  margin: 8px 0 0;
+  color: #566071;
+  font-size: 16px;
+  line-height: 1.45;
+}
+
+.rating-field {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  gap: 4px;
+  margin: 0;
+  padding: 4px 0 0;
+  border: 0;
+}
+
+.rating-field button {
+  display: grid;
+  width: 56px;
+  height: 56px;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 16px;
+  color: #d5d9e1;
+  background: transparent;
+  transition:
+    color 140ms ease,
+    background 140ms ease,
+    transform 140ms ease;
+}
+
+.rating-field button.is-active {
+  color: #f5b82e;
+}
+
+.rating-field button:focus-visible,
+.rating-field button:hover {
+  outline: none;
+  background: rgba(245, 184, 46, 0.13);
+  transform: translateY(-2px);
+}
+
+.comment-field {
+  display: grid;
+  width: 100%;
+  gap: 8px;
+  color: #475467;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.comment-field textarea {
+  min-height: 116px;
+  border: 1px solid #d7dde7;
+  border-radius: 18px;
+  padding: 14px;
+  color: #172033;
+  background: #ffffff;
+  box-shadow: inset 0 1px 0 rgba(15, 23, 42, 0.03);
+  resize: vertical;
+}
+
+.comment-field textarea:focus {
+  border-color: var(--feedback-accent);
+  outline: 4px solid color-mix(in srgb, var(--feedback-accent) 16%, transparent);
+}
+
+.submit-button {
+  display: inline-flex;
+  width: 100%;
+  min-height: 54px;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 0;
+  border-radius: 18px;
+  color: #ffffff;
+  background: var(--feedback-accent);
+  box-shadow: 0 16px 32px color-mix(in srgb, var(--feedback-accent) 28%, transparent);
+  font-weight: 900;
+}
+
+.submit-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.48;
+  box-shadow: none;
+}
+
+.submit-button:not(:disabled):hover {
+  transform: translateY(-1px);
+}
+
+.error-message {
+  display: flex;
+  width: 100%;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0;
+  padding: 12px;
+  border: 1px solid rgba(169, 35, 35, 0.22);
+  border-radius: 14px;
+  color: #a92323;
+  background: rgba(169, 35, 35, 0.08);
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.4;
+  text-align: left;
+}
+
+.error-message svg {
+  flex: 0 0 auto;
+}
+
+.success-view {
+  min-height: 360px;
+  align-content: center;
+  padding: 38px 26px;
+}
+
+.success-icon {
+  display: grid;
+  width: 76px;
+  height: 76px;
+  place-items: center;
+  border-radius: 24px;
+  color: #ffffff;
+  background: var(--feedback-accent);
+  box-shadow: 0 16px 34px color-mix(in srgb, var(--feedback-accent) 28%, transparent);
+}
+
+@media (max-width: 430px) {
+  .feedback-shell {
+    align-items: stretch;
+    padding: 14px;
+  }
+
+  .feedback-card {
+    align-self: center;
+    border-radius: 24px;
+  }
+
+  .feedback-form,
+  .success-view {
+    padding: 24px 16px 18px;
+  }
+
+  .rating-field {
+    gap: 0;
+  }
+
+  .rating-field button {
+    width: 52px;
+    height: 52px;
+  }
+
+  .bot-message h1,
+  .success-view h1 {
+    font-size: 23px;
+  }
+}
