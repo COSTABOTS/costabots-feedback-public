@@ -114,8 +114,13 @@ export function App() {
               </>
             ) : (
               <>
-                <h1>Gracias por tu valoración</h1>
-                <p>Tu opinión nos ayuda a mejorar.</p>
+                <h1>Tu opinión es muy importante para nosotros</h1>
+                <div className="private-thanks-copy">
+                  <p>Hemos recibido tu comentario correctamente y nuestro equipo lo revisará personalmente.</p>
+                  <p>Escuchar a nuestros clientes nos ayuda a seguir mejorando cada día.</p>
+                  <p>Gracias por dedicar unos minutos a compartir tu experiencia.</p>
+                </div>
+                <p className="thanks-signature">Equipo Safari Restaurant</p>
               </>
             )}
           </div>

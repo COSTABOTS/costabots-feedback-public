@@ -278,6 +278,20 @@ button {
   box-shadow: 0 16px 34px color-mix(in srgb, var(--feedback-accent) 28%, transparent);
 }
 
+.private-thanks-copy {
+  display: grid;
+  gap: 10px;
+}
+
+.private-thanks-copy p {
+  margin: 0;
+}
+
+.thanks-signature {
+  color: #172033;
+  font-weight: 900;
+}
+
 .review-actions {
   display: grid;
   width: 100%;
