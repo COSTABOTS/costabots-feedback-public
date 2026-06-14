@@ -278,6 +278,39 @@ button {
   box-shadow: 0 16px 34px color-mix(in srgb, var(--feedback-accent) 28%, transparent);
 }
 
+.review-actions {
+  display: grid;
+  width: 100%;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.review-button {
+  display: inline-flex;
+  min-height: 52px;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 0;
+  border-radius: 18px;
+  color: #ffffff;
+  background: var(--feedback-accent);
+  box-shadow: 0 14px 28px color-mix(in srgb, var(--feedback-accent) 24%, transparent);
+  font-weight: 900;
+  text-decoration: none;
+}
+
+.review-button.secondary {
+  border: 1px solid color-mix(in srgb, var(--feedback-accent) 24%, #d7dde7);
+  color: #172033;
+  background: #ffffff;
+  box-shadow: none;
+}
+
+.review-button:hover {
+  transform: translateY(-1px);
+}
+
 @media (max-width: 430px) {
   .feedback-shell {
     align-items: stretch;

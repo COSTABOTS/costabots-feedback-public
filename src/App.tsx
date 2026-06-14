@@ -1,12 +1,18 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { CSSProperties, FormEvent } from 'react';
-import { AlertCircle, CheckCircle2, Send, Star } from 'lucide-react';
+import { AlertCircle, CheckCircle2, ExternalLink, Send, Star } from 'lucide-react';
 import {
   FALLBACK_BRANDING,
   loadPublicFeedbackBranding,
   submitFeedback,
 } from './feedback';
 import type { FeedbackBranding, FeedbackSubmitState } from './feedback';
+
+const GOOGLE_REVIEW_URL =
+  'https://www.google.com/maps/place/Safari+Restaurant/@36.5136772,-4.6574474,15z/data=!4m12!1m2!2m1!1sSafari+Restaurant+Wyndham+Fuengirola!3m8!1s0xd731df9652a6df5:0x6f0fd4bdf886a80b!8m2!3d36.5136772!4d-4.638393!9m1!1b1!15sCiRTYWZhcmkgUmVzdGF1cmFudCBXeW5kaGFtIEZ1ZW5naXJvbGEiA4gBAVomIiRzYWZhcmkgcmVzdGF1cmFudCB3eW5kaGFtIGZ1ZW5naXJvbGGSAQpyZXN0YXVyYW50mgFEQ2k5RFFVbFJRVU52WkVOb2RIbGpSamx2VDJ4T1NHTlVSblZqYkRoM1RqQndjMXB0VGs5UFJHUXlVVE5HV1ZVeVl4QULgAQD6AQQIABA1!16s%2Fg%2F11gphzrlpz?entry=ttu&g_ep=EgoyMDI2MDUyMC4wIKXMDSoASAFQAw%3D%3D';
+
+const TRIPADVISOR_REVIEW_URL =
+  'https://www.tripadvisor.com/UserReviewEdit-g315915-d8680692-Safari_Restaurant-Fuengirola_Costa_del_Sol_Province_of_Malaga_Andalucia.html';
 
 function getReservationIdFromPath() {
   const match = window.location.pathname.match(/^\/feedback\/([^/]+)\/?$/);
@@ -43,6 +49,7 @@ export function App() {
   }, [idReserva]);
 
   const activeRating = hoverRating || rating;
+  const isPositiveRating = rating >= 4;
   const pageStyle = useMemo(
     () =>
       ({
@@ -86,8 +93,31 @@ export function App() {
               <CheckCircle2 size={42} />
             </span>
             <p className="restaurant-name">{branding.restaurantName}</p>
-            <h1>Gracias por tu valoración</h1>
-            <p>Tu opinión nos ayuda a mejorar.</p>
+            {isPositiveRating ? (
+              <>
+                <h1>¡Gracias por tu valoración!</h1>
+                <p>¿Nos ayudas compartiendo tu experiencia?</p>
+                <div className="review-actions">
+                  {GOOGLE_REVIEW_URL && (
+                    <a className="review-button" href={GOOGLE_REVIEW_URL} rel="noreferrer" target="_blank">
+                      Dejar reseña en Google
+                      <ExternalLink size={17} />
+                    </a>
+                  )}
+                  {TRIPADVISOR_REVIEW_URL && (
+                    <a className="review-button secondary" href={TRIPADVISOR_REVIEW_URL} rel="noreferrer" target="_blank">
+                      Dejar reseña en TripAdvisor
+                      <ExternalLink size={17} />
+                    </a>
+                  )}
+                </div>
+              </>
+            ) : (
+              <>
+                <h1>Gracias por tu valoración</h1>
+                <p>Tu opinión nos ayuda a mejorar.</p>
+              </>
+            )}
           </div>
         ) : (
           <form className="feedback-form" onSubmit={handleSubmit}>
